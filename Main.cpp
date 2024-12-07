@@ -4,6 +4,7 @@
 
 using namespace std;
 
+int score = 1;
 bool player = true;
 char tablero[3][3] = {{'1','2','3'},{'4','5','6'},{'7','8','9'}};
 int cordx;
@@ -31,9 +32,9 @@ bool isSafe(int x, int y) {
     return false;
 }
 
-bool mateCheck() {
+bool moveCheck() {
     for(int i=0;i<3;i++){
-        for(int j=0;j<3;j++){
+         for(int j=0;j<3;j++){
             if(tablero[i][j] != 'X' && tablero[i][j] != 'O'){
                 return false;
             }
@@ -42,16 +43,34 @@ bool mateCheck() {
     return true;
 }
 
-bool winCheck() {
-    for(int a=0;a<3;a++) {
+int winCheck() {
+
+    if(moveCheck == false){
+        cout<< "No hay más movimientos, EMPATE" <<endl;  
+        return 0;
+    }
+    if(player == true){
+        for(int a=0;a<3;a++) {
         if(tablero[a][0]==tablero[a][1] && tablero[a][0]==tablero[a][2] || tablero[0][a]==tablero[1][a] && tablero[0][a]==tablero[2][a]){
-            return true;
+            return -10;
+        }
+        }
+        if(tablero[0][0]==tablero[1][1] && tablero[1][1]==tablero[2][2] || tablero[0][2]==tablero[1][1] && tablero[1][1]==tablero[2][0]){
+           return -10;
         }
     }
-    if(tablero[0][0]==tablero[1][1] && tablero[1][1]==tablero[2][2] || tablero[0][2]==tablero[1][1] && tablero[1][1]==tablero[2][0]){
-        return true;
+    else {
+        for(int a=0;a<3;a++) {
+        if(tablero[a][0]==tablero[a][1] && tablero[a][0]==tablero[a][2] || tablero[0][a]==tablero[1][a] && tablero[0][a]==tablero[2][a]){
+            return 10;
+        }
+        }
+        if(tablero[0][0]==tablero[1][1] && tablero[1][1]==tablero[2][2] || tablero[0][2]==tablero[1][1] && tablero[1][1]==tablero[2][0]){
+           return 10;
+        }
     }
-    return false;
+    
+    return 1;
 }
 
 void movimiento() {
@@ -104,7 +123,7 @@ void movimiento() {
             cordy = 2;
             break;
         default:
-            cout<< "Ingresa una Coordenada válida (1-9)" << endl;
+            cout<< "Ingresa una Coordenada correcta (1-9)" << endl;
             positionValid = false;
             break;
     }
@@ -131,17 +150,13 @@ void movimiento() {
 int main() {
 
     gatoGame();
-    while(!winCheck()){
+    while(winCheck()==1){
         movimiento();
         winCheck();
     }
 
     if(winCheck()){
         cout<< "Fin de la partida" <<endl;
-    }
-
-    else if(mateCheck()){
-        cout<< "Nadie gana la partida, suerte a la proxima" << endl;
     }
 
     system("pause");
