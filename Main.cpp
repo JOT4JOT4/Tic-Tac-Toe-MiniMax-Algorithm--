@@ -25,6 +25,12 @@ void gatoGame(){
     return;
 }
 
+bool is_number(string& s){
+    string::const_iterator it = s.begin();
+    while (it != s.end() && std::isdigit(*it)) ++it;
+    return !s.empty() && it == s.end();
+}
+
 bool isSafe(int x, int y) {
 
     if(tablero[x][y] != 'X' && tablero[x][y] != 'O') return true;
@@ -75,14 +81,16 @@ int winCheck() {
 
 void movimiento() {
 
+    string input = "";
     int position;
     bool positionValid = true;
     bool safe;
     do {
         positionValid = true;
         cout<< "Ingresa una Coordenada (1-9)" << endl;
-        cin>>position;
+        cin>>input;
     
+    position = (is_number(input) ? stoi(input) : -1);
 
     switch (position)
     {
