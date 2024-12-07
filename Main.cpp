@@ -6,11 +6,10 @@ using namespace std;
 
 int score = 1;
 bool player = true;
-char tablero[3][3] = {{'1','2','3'},{'4','5','6'},{'7','8','9'}};
 int cordx;
 int cordy;
 
-void gatoGame(){
+void gatoGame(char tablero[3][3]){
     
     cout<< "    |    |    \n";
     cout<< " "<<tablero[0][0]<<"  | " <<tablero[0][1]<<"  | "<<tablero[0][2]<<"  \n";
@@ -31,14 +30,14 @@ bool is_number(string& s){
     return !s.empty() && it == s.end();
 }
 
-bool isSafe(int x, int y) {
+bool isSafe(int x, int y,char tablero[3][3]) {
 
     if(tablero[x][y] != 'X' && tablero[x][y] != 'O') return true;
 
     return false;
 }
 
-bool moveCheck() {
+bool moveCheck(char tablero[3][3]) {
     for(int i=0;i<3;i++){
          for(int j=0;j<3;j++){
             if(tablero[i][j] != 'X' && tablero[i][j] != 'O'){
@@ -49,9 +48,9 @@ bool moveCheck() {
     return true;
 }
 
-int winCheck() {
+int winCheck(char tablero[3][3]) {
 
-    if(moveCheck == false){
+    if(moveCheck(tablero) == true){
         cout<< "No hay más movimientos, EMPATE" <<endl;  
         return 0;
     }
@@ -79,7 +78,7 @@ int winCheck() {
     return 1;
 }
 
-void movimiento() {
+void movimiento(char tablero[3][3]) {
 
     string input = "";
     int position;
@@ -137,7 +136,7 @@ void movimiento() {
     }
     
     if (positionValid) {
-        safe = isSafe(cordx, cordy);
+        safe = isSafe(cordx, cordy,tablero);
         cout << (!safe ? " Coordenada ya ocupada " : "") << endl;
         positionValid = safe;
     }  
@@ -147,19 +146,54 @@ void movimiento() {
     if(player == true) {
         tablero[cordx][cordy] = 'X';
         player = false;
-        gatoGame();
+        gatoGame(tablero);
     }
 }
 
-int main() {
+int minimax(char tablero[3][3], bool isPlayer){
 
-    gatoGame();
-    while(winCheck()==1){
-        movimiento();
-        winCheck();
+    int score = winCheck(tablero);
+
+    if(score == 10) return score;
+
+    if(score == -10) return score;
+
+    if(moveCheck(tablero)==false) return 0;
+
+    if(isPlayer){
+        int puntajeMax = -1000;
+        for(int i = 0;i<3;i++){
+            for(int j = 0;j<3;j++){
+                puntajeMax = max(puntajeMax,minimax(tablero,!isPlayer));
+            }
+        }
+        return puntajeMax;
+    }
+    else {
+        int puntajeMin = 1000;
+
+        for(int i=0;i<3;i++){
+            for(int j=0;j<3;j++){
+                puntajeMin = min(puntajeMin,minimax(tablero,!isPlayer));
+            }
+        }
+        return puntajeMin;
     }
 
-    if(winCheck()){
+}
+
+
+int main() {
+
+    char tablero[3][3] = {{'1','2','3'},{'4','5','6'},{'7','8','9'}};
+
+    gatoGame(tablero);
+    while(winCheck(tablero)==1){
+        movimiento(tablero);
+        winCheck(tablero);
+    }
+
+    if(winCheck(tablero)){
         cout<< "Fin de la partida" <<endl;
     }
 
