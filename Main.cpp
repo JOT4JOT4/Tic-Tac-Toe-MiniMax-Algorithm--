@@ -125,6 +125,7 @@ void movimiento() {
 
 int main() {
 
+    gatoGame();
     while(!winCheck()){
         movimiento();
         winCheck();
