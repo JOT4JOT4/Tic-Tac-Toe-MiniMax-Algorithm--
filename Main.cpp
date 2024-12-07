@@ -44,7 +44,7 @@ bool mateCheck() {
 
 bool winCheck() {
     for(int a=0;a<3;a++) {
-        if(tablero[a][0]==tablero[a][0] && tablero[a][0]==tablero[a][2] || tablero[0][a]==tablero[1][a] && tablero[0][a]==tablero[2][a]){
+        if(tablero[a][0]==tablero[a][1] && tablero[a][0]==tablero[a][2] || tablero[0][a]==tablero[1][a] && tablero[0][a]==tablero[2][a]){
             return true;
         }
     }
@@ -68,32 +68,32 @@ void movimiento() {
             cordy = 0;
             break;
         case 2:
-            cordx = 1;
-            cordy = 0;
-            break;
-        case 3:
-            cordx = 2;
-            cordy = 0;
-            break;
-        case 4:
             cordx = 0;
             cordy = 1;
+            break;
+        case 3:
+            cordx = 0;
+            cordy = 2;
+            break;
+        case 4:
+            cordx = 1;
+            cordy = 0;
             break;
         case 5:
             cordx = 1;
             cordy = 1;
             break;
         case 6:
-            cordx = 2;
-            cordy = 1;
-            break;
-        case 7:
-            cordx = 0;
-            cordy = 2;
-            break;
-        case 8:
             cordx = 1;
             cordy = 2;
+            break;
+        case 7:
+            cordx = 2;
+            cordy = 0;
+            break;
+        case 8:
+            cordx = 2;
+            cordy = 1;
             break;
         case 9:
             cordx = 2;
@@ -108,13 +108,11 @@ void movimiento() {
     if(player == 'x' && isSafe(cordx,cordy)) {
         tablero[cordx][cordy] = player;
         player = 'o';
-        gatoGame();
     }
 
     if(player == 'o' && isSafe(cordx,cordy)) {
         tablero[cordx][cordy] = player;
         player = 'x';
-        gatoGame();
     }
 
 }
@@ -136,6 +134,6 @@ int main() {
     }
 
     system("pause");
-    
+
     return -1;
 }
