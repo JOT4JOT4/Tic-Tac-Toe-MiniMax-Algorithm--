@@ -107,12 +107,14 @@ void movimiento() {
 
     if(player == true && isSafe(cordx,cordy)) {
         tablero[cordx][cordy] = 'X';
-        player = 'O';
+        player = false;
+        gatoGame();
     }
 
     if(player == false && isSafe(cordx,cordy)) {
         tablero[cordx][cordy] = 'O';
-        player = 'X';
+        player = true;
+        gatoGame();
     }
 
 }
@@ -120,13 +122,12 @@ void movimiento() {
 int main() {
 
     while(!winCheck()){
-        gatoGame();
         movimiento();
         winCheck();
     }
 
     if(winCheck()){
-        cout<< player <<"Gana la partida"<<endl;
+        cout<< "Fin de la partida" <<endl;
     }
 
     else if(mateCheck()){
