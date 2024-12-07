@@ -148,10 +148,6 @@ void movimiento() {
         tablero[cordx][cordy] = 'X';
         player = false;
         gatoGame();
-    } else {
-        tablero[cordx][cordy] = 'O';
-        player = true;
-        gatoGame();
     }
 }
 
