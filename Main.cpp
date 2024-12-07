@@ -4,7 +4,7 @@
 
 using namespace std;
 
-char player = 'x';
+bool player = true;
 char tablero[3][3] = {{'1','2','3'},{'4','5','6'},{'7','8','9'}};
 int cordx;
 int cordy;
@@ -26,7 +26,7 @@ void gatoGame(){
 
 bool isSafe(int x, int y) {
 
-    if(tablero[x][y] != 'x' && tablero[x][y] != 'o') return true;
+    if(tablero[x][y] != 'X' && tablero[x][y] != 'O') return true;
 
     return false;
 }
@@ -34,7 +34,7 @@ bool isSafe(int x, int y) {
 bool mateCheck() {
     for(int i=0;i<3;i++){
         for(int j=0;j<3;j++){
-            if(tablero[i][j] != 'x' && tablero[i][j] != 'y'){
+            if(tablero[i][j] != 'X' && tablero[i][j] != 'O'){
                 return false;
             }
         }
@@ -105,14 +105,14 @@ void movimiento() {
             break;
     }
 
-    if(player == 'x' && isSafe(cordx,cordy)) {
-        tablero[cordx][cordy] = player;
-        player = 'o';
+    if(player == true && isSafe(cordx,cordy)) {
+        tablero[cordx][cordy] = 'X';
+        player = 'O';
     }
 
-    if(player == 'o' && isSafe(cordx,cordy)) {
-        tablero[cordx][cordy] = player;
-        player = 'x';
+    if(player == false && isSafe(cordx,cordy)) {
+        tablero[cordx][cordy] = 'O';
+        player = 'X';
     }
 
 }
