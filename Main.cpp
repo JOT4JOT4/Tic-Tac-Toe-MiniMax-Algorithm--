@@ -58,6 +58,7 @@ void movimiento() {
 
     int position;
     bool positionValid = true;
+    bool safe;
     do {
         positionValid = true;
         cout<< "Ingresa una Coordenada (1-9)" << endl;
@@ -107,20 +108,24 @@ void movimiento() {
             positionValid = false;
             break;
     }
+    
+    if (positionValid) {
+        safe = isSafe(cordx, cordy);
+        cout << (!safe ? " Coordenada ya ocupada " : "") << endl;
+        positionValid = safe;
+    }  
+
     }while (!positionValid);
 
-    if(player == true && isSafe(cordx,cordy)) {
+    if(player == true) {
         tablero[cordx][cordy] = 'X';
         player = false;
         gatoGame();
-    }
-
-    if(player == false && isSafe(cordx,cordy)) {
+    } else {
         tablero[cordx][cordy] = 'O';
         player = true;
         gatoGame();
     }
-
 }
 
 int main() {
