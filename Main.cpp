@@ -57,9 +57,12 @@ bool winCheck() {
 void movimiento() {
 
     int position;
-
-    cout<< "Ingresa una Coordenada (1-9)" << endl;
-    cin>>position;
+    bool positionValid = true;
+    do {
+        positionValid = true;
+        cout<< "Ingresa una Coordenada (1-9)" << endl;
+        cin>>position;
+    
 
     switch (position)
     {
@@ -101,9 +104,10 @@ void movimiento() {
             break;
         default:
             cout<< "Ingresa una Coordenada válida (1-9)" << endl;
-            cin>>position;
+            positionValid = false;
             break;
     }
+    }while (!positionValid);
 
     if(player == true && isSafe(cordx,cordy)) {
         tablero[cordx][cordy] = 'X';
