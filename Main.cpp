@@ -50,10 +50,6 @@ bool moveCheck(char tablero[3][3]) {
 
 int winCheck(char tablero[3][3]) {
 
-    if(moveCheck(tablero) == true){
-        cout<< "No hay más movimientos, EMPATE" <<endl;  
-        return 0;
-    }
     if(player == true){
         for(int a=0;a<3;a++) {
         if(tablero[a][0]==tablero[a][1] && tablero[a][0]==tablero[a][2] || tablero[0][a]==tablero[1][a] && tablero[0][a]==tablero[2][a]){
@@ -73,6 +69,11 @@ int winCheck(char tablero[3][3]) {
         if(tablero[0][0]==tablero[1][1] && tablero[1][1]==tablero[2][2] || tablero[0][2]==tablero[1][1] && tablero[1][1]==tablero[2][0]){
            return 10;
         }
+    }
+
+    if(moveCheck(tablero) == true){
+        cout<< "No hay más movimientos, EMPATE" <<endl;  
+        return 0;
     }
     
     return 1;
@@ -147,6 +148,12 @@ void movimiento(char tablero[3][3]) {
         tablero[cordx][cordy] = 'X';
         player = false;
         gatoGame(tablero);
+    }
+
+    else {
+        tablero[cordx][cordy] = 'O';
+        player = true;
+        gatoGame(tablero); 
     }
 }
 
