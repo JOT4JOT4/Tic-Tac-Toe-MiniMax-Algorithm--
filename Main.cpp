@@ -72,7 +72,7 @@ int winCheck(char tablero[3][3]) {
     }
 
     if(moveCheck(tablero) == true){
-        cout<< "No hay más movimientos, EMPATE" <<endl;  
+        cout<< "No more moves" <<endl;  
         return 0;
     }
     
@@ -87,7 +87,7 @@ void movimiento(char tablero[3][3]) {
     bool safe;
     do {
         positionValid = true;
-        cout<< "Ingresa una Coordenada (1-9)" << endl;
+        cout<< "Enter a number (1-9)" << endl;
         cin>>input;
     
     position = (is_number(input) ? stoi(input) : -1);
@@ -131,7 +131,7 @@ void movimiento(char tablero[3][3]) {
             cordy = 2;
             break;
         default:
-            cout<< "Ingresa una Coordenada correcta (1-9)" << endl;
+            cout<< "Enter a correct number (1-9)" << endl;
             positionValid = false;
             break;
     }
@@ -157,7 +157,7 @@ void movimiento(char tablero[3][3]) {
     }
 }
 
-int minimax(char tablero[3][3], bool isPlayer){
+int minimax(char tablero[3][3], bool isPlayer, int alpha, int beta){
 
     int score = winCheck(tablero);
 
@@ -171,7 +171,16 @@ int minimax(char tablero[3][3], bool isPlayer){
         int puntajeMax = -1000;
         for(int i = 0;i<3;i++){
             for(int j = 0;j<3;j++){
-                puntajeMax = max(puntajeMax,minimax(tablero,!isPlayer));
+
+                if(isSafe(i,j,tablero)){
+                    tablero[i][j] = 'X';
+                }
+                puntajeMax = max(puntajeMax,minimax(tablero,!isPlayer,alpha,beta));
+                alpha = max(alpha,puntajeMax);
+                
+                if(beta <= alpha) {
+                break;
+            }
             }
         }
         return puntajeMax;
@@ -181,7 +190,16 @@ int minimax(char tablero[3][3], bool isPlayer){
 
         for(int i=0;i<3;i++){
             for(int j=0;j<3;j++){
-                puntajeMin = min(puntajeMin,minimax(tablero,!isPlayer));
+
+                if(isSafe(i,j,tablero)){
+                    tablero[i][j] = 'O';
+                }
+                puntajeMin = min(puntajeMin,minimax(tablero,!isPlayer,alpha,beta));
+                beta = min(beta,puntajeMin);
+                if(beta <= alpha) {
+                    break;
+                }
+
             }
         }
         return puntajeMin;
@@ -189,6 +207,17 @@ int minimax(char tablero[3][3], bool isPlayer){
 
 }
 
+void whosWin(int score) {
+    if(score == 10){
+        cout<< "Player X Wins!!"<< endl;
+    }
+    if(score == -10){
+        cout<< "Player O Wins!!"<< endl;
+    }
+    else {
+        cout<< "It a Draw!!"<< endl;
+    }
+}
 
 int main() {
 
@@ -197,12 +226,12 @@ int main() {
     gatoGame(tablero);
     while(winCheck(tablero)==1){
         movimiento(tablero);
+        minimax(tablero,false,-999,999);
         winCheck(tablero);
     }
 
-    if(winCheck(tablero)){
-        cout<< "Fin de la partida" <<endl;
-    }
+    whosWin(winCheck(tablero));
+    cout<< "GAME OVER" <<endl;
 
     system("pause");
 
