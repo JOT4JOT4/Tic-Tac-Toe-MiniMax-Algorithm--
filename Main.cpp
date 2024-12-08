@@ -211,12 +211,21 @@ void whosWin(int score) {
     if(score == 10){
         cout<< "Player X Wins!!"<< endl;
     }
-    if(score == -10){
+    else if(score == -10){
         cout<< "Player O Wins!!"<< endl;
     }
     else {
         cout<< "It a Draw!!"<< endl;
     }
+}
+
+void singlePlayer() {
+
+    while (score == 1)
+    {
+        
+    }
+    
 }
 
 int main() {
