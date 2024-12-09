@@ -10,18 +10,6 @@ int score = 1;
 int cordx;
 int cordy;
 
-void gatoGame(char tablero[3][3]) {
-    cout << "    |    |    \n";
-    cout << " " << tablero[0][0] << "  | " << tablero[0][1] << "  | " << tablero[0][2] << "  \n";
-    cout << "____|____|____\n";
-    cout << "    |    |    \n";
-    cout << " " << tablero[1][0] << "  | " << tablero[1][1] << "  | " << tablero[1][2] << "  \n";
-    cout << "____|____|____\n";
-    cout << "    |    |    \n";
-    cout << " " << tablero[2][0] << "  | " << tablero[2][1] << "  | " << tablero[2][2] << "  \n";
-    cout << "    |    |    \n";
-}
-
 bool is_number(string &s) {
     for (char c : s) {
         if (!isdigit((unsigned char)c)) return false;

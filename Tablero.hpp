@@ -11,5 +11,5 @@ class Tablero
         void gatoGame();
         char mostrarCoord(int x,int y);
         void cambiarCoord(int x,int y,char signo);
-        void cambiarCoord(int x,int y);
+        
 };

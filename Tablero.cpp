@@ -28,10 +28,14 @@ void Tablero::gatoGame(){
 }
 
 char Tablero::mostrarCoord(int x,int y){
-
+    if (x < 0 || x >= 3 || y < 0 || y >= 3) {
+        throw std::out_of_range("Coordenadas fuera de rango");
+    }
     return tablero[x][y];
 }
 void Tablero::cambiarCoord(int x,int y,char signo){
-
+    if (x < 0 || x >= 3 || y < 0 || y >= 3) {
+        throw std::out_of_range("Coordenadas fuera de rango");
+    }
     tablero[x][y]=signo;
 }
