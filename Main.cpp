@@ -47,19 +47,56 @@ bool moveCheck(char tablero[3][3]) {
     return true;
 }
 
-int winCheck(char tablero[3][3],bool player) {
-
+int winCheck(char b[3][3]) {
+     // Checking for Rows for X or O victory. 
+    for (int row = 0; row<3; row++) 
+    { 
+        if (b[row][0]==b[row][1] && 
+            b[row][1]==b[row][2]) 
+        { 
+            if (b[row][0]=='X') 
+                return +10; 
+            else if (b[row][0]== 'O') 
+                return -10; 
+        } 
+    } 
+  
+    // Checking for Columns for X or O victory. 
+    for (int col = 0; col<3; col++) 
+    { 
+        if (b[0][col]==b[1][col] && 
+            b[1][col]==b[2][col]) 
+        { 
+            if (b[0][col]=='X') 
+                return +10; 
+  
+            else if (b[0][col]== 'O') 
+                return -10; 
+        } 
+    } 
+  
+    // Checking for Diagonals for X or O victory. 
+    if (b[0][0]==b[1][1] && b[1][1]==b[2][2]) 
+    { 
+        if (b[0][0]=='X') 
+            return +10; 
+        else if (b[0][0]== 'O') 
+            return -10; 
+    } 
+  
+    if (b[0][2]==b[1][1] && b[1][1]==b[2][0]) 
+    { 
+        if (b[0][2]=='X') 
+            return +10; 
+        else if (b[0][2]== 'O') 
+            return -10; 
+    } 
+  
+    // Else if none of them have won then return 0 
+    return 0; 
+    
+    /*
     if(player == true){
-        for(int a=0;a<3;a++) {
-        if(tablero[a][0]==tablero[a][1] && tablero[a][0]==tablero[a][2] || tablero[0][a]==tablero[1][a] && tablero[0][a]==tablero[2][a]){
-            return -10;
-        }
-        }
-        if(tablero[0][0]==tablero[1][1] && tablero[1][1]==tablero[2][2] || tablero[0][2]==tablero[1][1] && tablero[1][1]==tablero[2][0]){
-           return -10;
-        }
-    }
-    else {
         for(int a=0;a<3;a++) {
         if(tablero[a][0]==tablero[a][1] && tablero[a][0]==tablero[a][2] || tablero[0][a]==tablero[1][a] && tablero[0][a]==tablero[2][a]){
             return 10;
@@ -69,6 +106,16 @@ int winCheck(char tablero[3][3],bool player) {
            return 10;
         }
     }
+    else {
+        for(int a=0;a<3;a++) {
+        if(tablero[a][0]==tablero[a][1] && tablero[a][0]==tablero[a][2] || tablero[0][a]==tablero[1][a] && tablero[0][a]==tablero[2][a]){
+            return -10;
+        }
+        }
+        if(tablero[0][0]==tablero[1][1] && tablero[1][1]==tablero[2][2] || tablero[0][2]==tablero[1][1] && tablero[1][1]==tablero[2][0]){
+           return -10;
+        }
+    }
 
     if(moveCheck(tablero) == true){
         cout<< "No more moves" <<endl;  
@@ -76,6 +123,7 @@ int winCheck(char tablero[3][3],bool player) {
     }
     
     return 1;
+    */
 }
 
 void movimiento(char tablero[3][3],bool player) {
@@ -158,7 +206,7 @@ void movimiento(char tablero[3][3],bool player) {
 
 int minimax(char tablero[3][3], bool isPlayer, int alpha, int beta){
 
-    int score = winCheck(tablero,isPlayer);
+    int score = winCheck(tablero);
 
     if(score == 10) return score;
 
@@ -269,15 +317,15 @@ void singlePlayer(char tablero[3][3]) {
 
     bool player = true;
 
-    while(winCheck(tablero,player)==1){
+    while(!moveCheck(tablero)){
         gatoGame(tablero);
         movimiento(tablero,true);
         bestMove(tablero);
-        cout<< winCheck(tablero,player)<<endl;
+        cout<< winCheck(tablero)<<endl;
     }
 
     gatoGame(tablero);
-    whosWin(winCheck(tablero,player));
+    whosWin(winCheck(tablero));
     cout<< "GAME OVER" <<endl;
     
     
