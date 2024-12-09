@@ -34,14 +34,12 @@ Si en cualquier rama el valor de alfa supera a beta, esa rama se descarta porque
 Diagrama del árbol de juego
 Caso: Primeros 3 movimientos
 
-----------------------------
--
             (Raíz)
          /    |    \
       -1      0      1
      / \     / \    / \
     -1  0   0   1  -1  1
-----------------------------
+
 
 Cada nodo representa un estado del tablero.
 Los números indican la evaluación del estado para el jugador actual (-1 = pierde, 0 = empate, 1 = gana).
