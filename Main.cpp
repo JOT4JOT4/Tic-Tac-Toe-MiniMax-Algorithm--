@@ -1,6 +1,8 @@
 #include <string>
-#include <vector>
 #include <iostream>
+#include <cctype>
+#include <algorithm>
+#include "Tablero.hpp"
 
 using namespace std;
 
@@ -8,38 +10,36 @@ int score = 1;
 int cordx;
 int cordy;
 
-void gatoGame(char tablero[3][3]){
-    
-    cout<< "    |    |    \n";
-    cout<< " "<<tablero[0][0]<<"  | " <<tablero[0][1]<<"  | "<<tablero[0][2]<<"  \n";
-    cout<< "____|____|____\n";
-    cout<< "    |    |    \n";
-    cout<< " "<<tablero[1][0]<<"  | " <<tablero[1][1]<<"  | "<<tablero[1][2]<<"  \n";
-    cout<< "____|____|____\n";
-    cout<< "    |    |    \n";
-    cout<< " "<<tablero[2][0]<<"  | " <<tablero[2][1]<<"  | "<<tablero[2][2]<<"  \n";
-    cout<< "    |    |    \n";
-
-    return;
+void gatoGame(char tablero[3][3]) {
+    cout << "    |    |    \n";
+    cout << " " << tablero[0][0] << "  | " << tablero[0][1] << "  | " << tablero[0][2] << "  \n";
+    cout << "____|____|____\n";
+    cout << "    |    |    \n";
+    cout << " " << tablero[1][0] << "  | " << tablero[1][1] << "  | " << tablero[1][2] << "  \n";
+    cout << "____|____|____\n";
+    cout << "    |    |    \n";
+    cout << " " << tablero[2][0] << "  | " << tablero[2][1] << "  | " << tablero[2][2] << "  \n";
+    cout << "    |    |    \n";
 }
 
-bool is_number(string& s){
-    string::const_iterator it = s.begin();
-    while (it != s.end() && std::isdigit(*it)) ++it;
-    return !s.empty() && it == s.end();
+bool is_number(string &s) {
+    for (char c : s) {
+        if (!isdigit((unsigned char)c)) return false;
+    }
+    return !s.empty();
 }
 
-bool isSafe(int x, int y,char tablero[3][3]) {
-
-    if(tablero[x][y] != 'X' && tablero[x][y] != 'O') return true;
-
+bool isSafe(int x, int y, Tablero tablero) {
+    tablero.gatoGame();
+    if (tablero.mostrarCoord(x,y) != 'X' && tablero.mostrarCoord(x,y) != 'O') return true;
     return false;
 }
 
-bool moveCheck(char tablero[3][3]) {
-    for(int i=0;i<3;i++){
-         for(int j=0;j<3;j++){
-            if(tablero[i][j] != 'X' && tablero[i][j] != 'O'){
+bool moveCheck(Tablero tablero) {
+    // Retorna true si NO hay movimientos, false si aún hay
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            if (tablero.mostrarCoord(i,j) != 'X' && tablero.mostrarCoord(i,j) != 'O') {
                 return false;
             }
         }
@@ -47,55 +47,45 @@ bool moveCheck(char tablero[3][3]) {
     return true;
 }
 
-int winCheck(char b[3][3]) {
-     // Checking for Rows for X or O victory. 
-    for (int row = 0; row<3; row++) 
-    { 
-        if (b[row][0]==b[row][1] && 
-            b[row][1]==b[row][2]) 
-        { 
-            if (b[row][0]=='X') 
-                return +10; 
-            else if (b[row][0]== 'O') 
-                return -10; 
-        } 
-    } 
-  
-    // Checking for Columns for X or O victory. 
-    for (int col = 0; col<3; col++) 
-    { 
-        if (b[0][col]==b[1][col] && 
-            b[1][col]==b[2][col]) 
-        { 
-            if (b[0][col]=='X') 
-                return +10; 
-  
-            else if (b[0][col]== 'O') 
-                return -10; 
-        } 
-    } 
-  
-    // Checking for Diagonals for X or O victory. 
-    if (b[0][0]==b[1][1] && b[1][1]==b[2][2]) 
-    { 
-        if (b[0][0]=='X') 
-            return +10; 
-        else if (b[0][0]== 'O') 
-            return -10; 
-    } 
-  
-    if (b[0][2]==b[1][1] && b[1][1]==b[2][0]) 
-    { 
-        if (b[0][2]=='X') 
-            return +10; 
-        else if (b[0][2]== 'O') 
-            return -10; 
-    } 
-  
-    return 0; 
+int winCheck(Tablero tablero) {
+    
+    for (int fila = 0; fila < 3; fila++) {
+        if (tablero.mostrarCoord(fila,0) == tablero.mostrarCoord(fila,1) && tablero.mostrarCoord(fila,1)== tablero.mostrarCoord(fila,2)) {
+            if (tablero.mostrarCoord(fila,0) == 'X')
+                return +10;
+            else if (tablero.mostrarCoord(fila,0) == 'O')
+                return -10;
+        }
+    }
+
+    for (int col = 0; col < 3; col++) {
+        if (tablero.mostrarCoord(0,col)== tablero.mostrarCoord(1,col)&& tablero.mostrarCoord(1,col) == tablero.mostrarCoord(2,col)) {
+            if (tablero.mostrarCoord(0,col)== 'X')
+                return +10;
+            else if (tablero.mostrarCoord(0,col)== 'O')
+                return -10;
+        }
+    }
+
+    if (tablero.mostrarCoord(0,0)== tablero.mostrarCoord(1,1) && tablero.mostrarCoord(1,1) == tablero.mostrarCoord(2,2)) {
+        if (tablero.mostrarCoord(0,0)== 'X')
+            return +10;
+        else if (tablero.mostrarCoord(0,0) == 'O')
+            return -10;
+    }
+
+    if (tablero.mostrarCoord(0,2) == tablero.mostrarCoord(1,1) && tablero.mostrarCoord(1,1)== tablero.mostrarCoord(2,0)) {
+        if (tablero.mostrarCoord(0,2)== 'X')
+            return +10;
+        else if (tablero.mostrarCoord(0,2)== 'O')
+            return -10;
+    }
+
+    // Nadie gana
+    return 0;
 }
 
-void movimiento(char tablero[3][3], bool player) {
+void movimiento(Tablero tablero, bool player) {
     string input = "";
     int position;
     bool positionValid = true;
@@ -103,48 +93,22 @@ void movimiento(char tablero[3][3], bool player) {
 
     do {
         positionValid = true;
-        cout << "Jugador, ingresa un numero (1-9): ";
+        cout << "Jugador X, ingresa un numero (1-9): ";
         cin >> input;
 
         position = (is_number(input) ? stoi(input) : -1);
 
         switch (position) {
-            case 1: 
-                cordx = 0; 
-                cordy = 0; 
-                break;
-            case 2: 
-                cordx = 0; 
-                cordy = 1; 
-                break;
-            case 3: 
-                cordx = 0; 
-                cordy = 2; 
-                break;
-            case 4: 
-                cordx = 1; 
-                cordy = 0; 
-                break;
-            case 5: 
-                cordx = 1; 
-                cordy = 1; 
-                break;
-            case 6: 
-                cordx = 1; 
-                cordy = 2; 
-                break;
-            case 7: 
-                cordx = 2; 
-                cordy = 0; 
-                break;
-            case 8: 
-                cordx = 2; 
-                cordy = 1; 
-                break;
-            case 9: 
-                cordx = 2; 
-                cordy = 2; 
-                break;
+            case 1: cordx = 0; cordy = 0; 
+            break;
+            case 2: cordx = 0; cordy = 1; break;
+            case 3: cordx = 0; cordy = 2; break;
+            case 4: cordx = 1; cordy = 0; break;
+            case 5: cordx = 1; cordy = 1; break;
+            case 6: cordx = 1; cordy = 2; break;
+            case 7: cordx = 2; cordy = 0; break;
+            case 8: cordx = 2; cordy = 1; break;
+            case 9: cordx = 2; cordy = 2; break;
             default:
                 cout << "Ingrese un número válido (1-9)." << endl;
                 positionValid = false;
@@ -161,42 +125,38 @@ void movimiento(char tablero[3][3], bool player) {
 
     } while (!positionValid);
 
-    // Coloca el coso
+    
     if (player == true) {
-        tablero[cordx][cordy] = 'X';
+        tablero.cambiarCoord(cordx,cordy,'X');
     } else {
-        tablero[cordx][cordy] = 'O';
+        tablero.cambiarCoord(cordx,cordy,'O');
     }
-    gatoGame(tablero);
+    tablero.gatoGame();
 }
 
-int minimax(char tablero[3][3], bool isPlayer, int alpha, int beta) {
-    
+int minimax(Tablero tablero, bool isPlayer, int alpha, int beta) {
     int score = winCheck(tablero);
 
-    if (score == 10){
-        return score;    // X gana
-    }
-    if (score == -10){
-        return score;   // O gana
-    }
+    // Si alguien ganó
+    if (score == 10) return score;    // X gana
+    if (score == -10) return score;   // O gana
+
     // Empate
     if (moveCheck(tablero) == true) return 0;
 
     if (isPlayer) {
-        // X
+        // Turno de X (maximiza)
         int puntajeMax = -1000;
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                
                 if (isSafe(i, j, tablero)) {
-
-                    char aux = tablero[i][j];
-                    tablero[i][j] = 'X';
+                    char aux = tablero.mostrarCoord(i,j);
+                    tablero.cambiarCoord(cordx,cordy,'X');;
 
                     int valor = minimax(tablero, !isPlayer, alpha, beta);
 
-                    tablero[i][j] = aux;
+                    // Revertir el movimiento
+                    tablero.cambiarCoord(i,j,aux);
 
                     if (valor > puntajeMax) puntajeMax = valor;
                     if (valor > alpha) alpha = valor;
@@ -206,17 +166,18 @@ int minimax(char tablero[3][3], bool isPlayer, int alpha, int beta) {
         }
         return puntajeMax;
     } else {
-        // O
+        // Turno de O (minimiza)
         int puntajeMin = 1000;
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 if (isSafe(i, j, tablero)) {
-                    char aux = tablero[i][j];
-                    tablero[i][j] = 'O';
+                    char aux = tablero.mostrarCoord(i,j);
+                    tablero.cambiarCoord(i,j,'O');
 
                     int valor = minimax(tablero, !isPlayer, alpha, beta);
 
-                    tablero[i][j] = aux;
+                    // Revertir el movimiento
+                    tablero.cambiarCoord(i,j,aux);
 
                     if (valor < puntajeMin) puntajeMin = valor;
                     if (valor < beta) beta = valor;
@@ -228,42 +189,30 @@ int minimax(char tablero[3][3], bool isPlayer, int alpha, int beta) {
     }
 }
 
-
 void whosWin(int score) {
-    if(score == 10){
-        cout<< "Player X Wins!!"<< endl;
-    }
-    else if(score == -10){
-        cout<< "Player(IA) O Wins!!"<< endl;
-    }
-    else {
-        cout<< "It a Draw!!"<< endl;
+    if (score == 10) {
+        cout << "¡Gana el jugador X!" << endl;
+    } else if (score == -10) {
+        cout << "¡Gana el jugador O (IA)!" << endl;
+    } else {
+        cout << "¡Empate!" << endl;
     }
 }
 
-char tableroAuxiliar(char tablero[3][3],char tableroAux[3][3]) {
-    for(int i=0;i<3;i++){
-        for(int j=0;j<3;j++){
-            tableroAux[i][j] = tablero[i][j];
-        }
-    }
-    return tableroAux[3][3];
-}
-
-void bestMove(char tablero[3][3]) {
-    int best = 9999; 
-    int x = -1;
-    int y = -1;
+void bestMove(Tablero tablero) {
+    // O minimiza
+    int best = 1000; 
+    int x = -1, y = -1;
 
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
             if (isSafe(i, j, tablero)) {
-                char aux = tablero[i][j];
-                tablero[i][j] = 'O';
+                char aux = tablero.mostrarCoord(i,j);
+                tablero.cambiarCoord(i,j,'O');
 
                 int move = minimax(tablero, true, -9999, 9999);
 
-                tablero[i][j] = aux;
+                tablero.cambiarCoord(i,j,aux);
 
                 if (move < best) {
                     best = move;
@@ -275,16 +224,15 @@ void bestMove(char tablero[3][3]) {
     }
 
     if (x != -1 && y != -1) {
-        tablero[x][y] = 'O';
+        tablero.cambiarCoord(x,y,'O');
         cout << "La IA (O) realiza su movimiento:\n";
-        gatoGame(tablero);
+        tablero.gatoGame();
     }
 }
 
-void singlePlayer(char tablero[3][3]) {
-    // X = humano (maximizador), O = IA (minimizadorr)
-    gatoGame(tablero);
-    // Empieza el (X)
+void singlePlayer(Tablero tablero) {
+    // Se asume X = humano (maximiza), O = IA (minimiza)
+    // Empieza el humano (X)
     while (true) {
         int w = winCheck(tablero);
         if (w == 10 || w == -10 || moveCheck(tablero)) {
@@ -294,7 +242,7 @@ void singlePlayer(char tablero[3][3]) {
             break;
         }
 
-        // Movimiento X
+        // Movimiento del humano X
         movimiento(tablero, true);
         w = winCheck(tablero);
         if (w == 10 || w == -10 || moveCheck(tablero)) {
@@ -313,68 +261,12 @@ void singlePlayer(char tablero[3][3]) {
             break;
         }
     }
-}
-
-void multiplayer(char tablero[3][3]) {
-    bool player = true; // true = Jugador X, false = Jugador O
-    int w = 0; //Ganador
-
-    gatoGame(tablero);
-
-    while (true) {
-        // Verifica si alguien ha ganado o si hay empate
-        w = winCheck(tablero);
-        if (w == 10 || w == -10 || moveCheck(tablero)) {
-            whosWin(w);
-            cout << "GAME OVER" << endl;
-            break;
-        }
-
-        // Turno del jugador actual
-        if (player) {
-            cout << "Turno de Jugador X\n";
-        } else {
-            cout << "Turno de Jugador O\n";
-        }
-        movimiento(tablero, player);
-
-        // Cambiar al otro jugador
-        player = !player;
-    }
-}
+}    
 
 int main() {
+    Tablero tablero;
 
-    int opcion;
-    char tablero[3][3] = {{'1','2','3'},{'4','5','6'},{'7','8','9'}};
+    singlePlayer(tablero);
 
-    do {
-        
-        cout << "Ingrese una opción:" << endl;
-        cout << "1) Jugador contra Jugador (JcJ)" << endl;
-        cout << "2) Jugador contra IA (JcIA)" << endl;
-        cout << "Opción: ";
-        
-        cin >> opcion;
-
-        if (opcion < 1 || opcion > 2) {
-            cout << "Por favor, ingrese una opción válida (1 o 2)." << endl;
-        }
-    } while (opcion < 1 || opcion > 2);
-
-    // Procesar la opción seleccionada
-    switch (opcion) {
-        case 1:
-            multiplayer(tablero);
-            break;
-        case 2:
-            singlePlayer(tablero);
-            break;
-        default:
-            break;
-    }
-
-    system("pause");
-
-    return -1;
+    return 0;
 }
