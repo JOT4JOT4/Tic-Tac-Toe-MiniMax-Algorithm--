@@ -103,7 +103,7 @@ void movimiento(char tablero[3][3], bool player) {
 
     do {
         positionValid = true;
-        cout << "Jugador X, ingresa un numero (1-9): ";
+        cout << "Jugador, ingresa un numero (1-9): ";
         cin >> input;
 
         position = (is_number(input) ? stoi(input) : -1);
@@ -283,6 +283,7 @@ void bestMove(char tablero[3][3]) {
 
 void singlePlayer(char tablero[3][3]) {
     // X = humano (maximizador), O = IA (minimizadorr)
+    gatoGame(tablero);
     // Empieza el (X)
     while (true) {
         int w = winCheck(tablero);
@@ -315,20 +316,63 @@ void singlePlayer(char tablero[3][3]) {
 }
 
 void multiplayer(char tablero[3][3]) {
+    bool player = true; // true = Jugador X, false = Jugador O
+    int w = 0; //Ganador
 
-        gatoGame(tablero);
-        while(winCheck(tablero)==1){
-            movimiento(tablero,true);
-            minimax(tablero,false,-999,999);
-            winCheck(tablero);
+    gatoGame(tablero);
+
+    while (true) {
+        // Verifica si alguien ha ganado o si hay empate
+        w = winCheck(tablero);
+        if (w == 10 || w == -10 || moveCheck(tablero)) {
+            whosWin(w);
+            cout << "GAME OVER" << endl;
+            break;
         }
+
+        // Turno del jugador actual
+        if (player) {
+            cout << "Turno de Jugador X\n";
+        } else {
+            cout << "Turno de Jugador O\n";
+        }
+        movimiento(tablero, player);
+
+        // Cambiar al otro jugador
+        player = !player;
+    }
 }
 
 int main() {
 
+    int opcion;
     char tablero[3][3] = {{'1','2','3'},{'4','5','6'},{'7','8','9'}};
 
-    singlePlayer(tablero);
+    do {
+        
+        cout << "Ingrese una opción:" << endl;
+        cout << "1) Jugador contra Jugador (JcJ)" << endl;
+        cout << "2) Jugador contra IA (JcIA)" << endl;
+        cout << "Opción: ";
+        
+        cin >> opcion;
+
+        if (opcion < 1 || opcion > 2) {
+            cout << "Por favor, ingrese una opción válida (1 o 2)." << endl;
+        }
+    } while (opcion < 1 || opcion > 2);
+
+    // Procesar la opción seleccionada
+    switch (opcion) {
+        case 1:
+            multiplayer(tablero);
+            break;
+        case 2:
+            singlePlayer(tablero);
+            break;
+        default:
+            break;
+    }
 
     system("pause");
 
