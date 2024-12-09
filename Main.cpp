@@ -92,38 +92,7 @@ int winCheck(char b[3][3]) {
             return -10; 
     } 
   
-    // Else if none of them have won then return 0 
     return 0; 
-    
-    /*
-    if(player == true){
-        for(int a=0;a<3;a++) {
-        if(tablero[a][0]==tablero[a][1] && tablero[a][0]==tablero[a][2] || tablero[0][a]==tablero[1][a] && tablero[0][a]==tablero[2][a]){
-            return 10;
-        }
-        }
-        if(tablero[0][0]==tablero[1][1] && tablero[1][1]==tablero[2][2] || tablero[0][2]==tablero[1][1] && tablero[1][1]==tablero[2][0]){
-           return 10;
-        }
-    }
-    else {
-        for(int a=0;a<3;a++) {
-        if(tablero[a][0]==tablero[a][1] && tablero[a][0]==tablero[a][2] || tablero[0][a]==tablero[1][a] && tablero[0][a]==tablero[2][a]){
-            return -10;
-        }
-        }
-        if(tablero[0][0]==tablero[1][1] && tablero[1][1]==tablero[2][2] || tablero[0][2]==tablero[1][1] && tablero[1][1]==tablero[2][0]){
-           return -10;
-        }
-    }
-
-    if(moveCheck(tablero) == true){
-        cout<< "No more moves" <<endl;  
-        return 0;
-    }
-    
-    return 1;
-    */
 }
 
 void movimiento(char tablero[3][3],bool player) {
@@ -321,7 +290,9 @@ void singlePlayer(char tablero[3][3]) {
         gatoGame(tablero);
         movimiento(tablero,true);
         bestMove(tablero);
-        cout<< winCheck(tablero)<<endl;
+        if(winCheck(tablero)!=1){
+            break;
+        }
     }
 
     gatoGame(tablero);
