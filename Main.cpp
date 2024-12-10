@@ -2,7 +2,7 @@
 #include <iostream>
 #include <cctype>
 #include <algorithm>
-#include "Tablero.hpp"
+#include "Tablero.cpp"
 
 using namespace std;
 
@@ -17,14 +17,14 @@ bool is_number(string &s) {
     return !s.empty();
 }
 
-bool isSafe(int x, int y, Tablero tablero) {
-    tablero.gatoGame();
+bool isSafe(int x, int y, Tablero& tablero) {
+    //tablero.gatoGame();
     if (tablero.mostrarCoord(x,y) != 'X' && tablero.mostrarCoord(x,y) != 'O') return true;
     return false;
 }
 
-bool moveCheck(Tablero tablero) {
-    // Retorna true si NO hay movimientos, false si aún hay
+bool moveCheck(Tablero& tablero) {
+
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
             if (tablero.mostrarCoord(i,j) != 'X' && tablero.mostrarCoord(i,j) != 'O') {
@@ -35,7 +35,7 @@ bool moveCheck(Tablero tablero) {
     return true;
 }
 
-int winCheck(Tablero tablero) {
+int winCheck(Tablero& tablero) {
     
     for (int fila = 0; fila < 3; fila++) {
         if (tablero.mostrarCoord(fila,0) == tablero.mostrarCoord(fila,1) && tablero.mostrarCoord(fila,1)== tablero.mostrarCoord(fila,2)) {
@@ -69,11 +69,10 @@ int winCheck(Tablero tablero) {
             return -10;
     }
 
-    // Nadie gana
     return 0;
 }
 
-void movimiento(Tablero tablero, bool player) {
+void movimiento(Tablero& tablero, bool player) {
     string input = "";
     int position;
     bool positionValid = true;
@@ -122,28 +121,27 @@ void movimiento(Tablero tablero, bool player) {
     tablero.gatoGame();
 }
 
-int minimax(Tablero tablero, bool isPlayer, int alpha, int beta) {
+int minimax(Tablero& tablero, bool isPlayer, int alpha, int beta) {
+
+
     int score = winCheck(tablero);
 
-    // Si alguien ganó
-    if (score == 10) return score;    // X gana
-    if (score == -10) return score;   // O gana
 
-    // Empate
+    if (score == 10) return score;    
+    if (score == -10) return score;   
+
     if (moveCheck(tablero) == true) return 0;
 
     if (isPlayer) {
-        // Turno de X (maximiza)
         int puntajeMax = -1000;
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 if (isSafe(i, j, tablero)) {
                     char aux = tablero.mostrarCoord(i,j);
-                    tablero.cambiarCoord(cordx,cordy,'X');;
+                    tablero.cambiarCoord(i,j,'X');;
 
                     int valor = minimax(tablero, !isPlayer, alpha, beta);
 
-                    // Revertir el movimiento
                     tablero.cambiarCoord(i,j,aux);
 
                     if (valor > puntajeMax) puntajeMax = valor;
@@ -154,7 +152,6 @@ int minimax(Tablero tablero, bool isPlayer, int alpha, int beta) {
         }
         return puntajeMax;
     } else {
-        // Turno de O (minimiza)
         int puntajeMin = 1000;
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
@@ -164,7 +161,6 @@ int minimax(Tablero tablero, bool isPlayer, int alpha, int beta) {
 
                     int valor = minimax(tablero, !isPlayer, alpha, beta);
 
-                    // Revertir el movimiento
                     tablero.cambiarCoord(i,j,aux);
 
                     if (valor < puntajeMin) puntajeMin = valor;
@@ -187,10 +183,11 @@ void whosWin(int score) {
     }
 }
 
-void bestMove(Tablero tablero) {
-    // O minimiza
+void bestMove(Tablero& tablero) {
     int best = 1000; 
     int x = -1, y = -1;
+
+
 
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
@@ -218,29 +215,24 @@ void bestMove(Tablero tablero) {
     }
 }
 
-void singlePlayer(Tablero tablero) {
-    // Se asume X = humano (maximiza), O = IA (minimiza)
-    // Empieza el humano (X)
+void singlePlayer(Tablero& tablero) {
+
     while (true) {
         int w = winCheck(tablero);
         if (w == 10 || w == -10 || moveCheck(tablero)) {
-            // Alguien ganó o no hay más movimientos
             whosWin(w);
             cout << "GAME OVER" << endl;
             break;
         }
 
-        // Movimiento del humano X
         movimiento(tablero, true);
         w = winCheck(tablero);
         if (w == 10 || w == -10 || moveCheck(tablero)) {
-            // Alguien ganó o empate
             whosWin(w);
             cout << "GAME OVER" << endl;
             break;
         }
 
-        // Movimiento IA O
         bestMove(tablero);
         w = winCheck(tablero);
         if (w == 10 || w == -10 || moveCheck(tablero)) {
@@ -249,12 +241,64 @@ void singlePlayer(Tablero tablero) {
             break;
         }
     }
-}    
+} 
+
+void multiplayer(Tablero tablero) {
+    bool player = true; 
+    int w = 0; 
+
+    tablero.gatoGame();
+
+    while (true) {
+        w = winCheck(tablero);
+        if (w == 10 || w == -10 || moveCheck(tablero)) {
+            whosWin(w);
+            cout << "GAME OVER" << endl;
+            break;
+        }
+
+        if (player) {
+            cout << "Turno de Jugador X\n";
+        } else {
+            cout << "Turno de Jugador O\n";
+        }
+        movimiento(tablero, player);
+
+        player = !player;
+    }
+}
 
 int main() {
+
+    int opcion;
     Tablero tablero;
 
-    singlePlayer(tablero);
+    do {
+        
+        cout << "Ingrese una opción:" << endl;
+        cout << "1) Jugador contra Jugador (JcJ)" << endl;
+        cout << "2) Jugador contra IA (JcIA)" << endl;
+        cout << "Opción: ";
+        
+        cin >> opcion;
 
-    return 0;
+        if (opcion < 1 || opcion > 2) {
+            cout << "Por favor, ingrese una opción válida (1 o 2)." << endl;
+        }
+    } while (opcion < 1 || opcion > 2);
+
+    switch (opcion) {
+        case 1:
+            multiplayer(tablero);
+            break;
+        case 2:
+            singlePlayer(tablero);
+            break;
+        default:
+            break;
+    }
+
+    system("pause");
+
+    return -1;
 }
