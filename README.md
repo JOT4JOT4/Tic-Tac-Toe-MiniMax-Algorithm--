@@ -5,7 +5,7 @@ por -Cristobal Luna / 21.006.280-7
 
 --Instrucciones para ejecutar el programa--
 compilador g++ (MinGW.org GCC-6.3.0-1) 6.3.0
-Para ejecutar el programa:
+Para ejecutar el programa(es nesesario cada vez que se inicia un nuevo juego):
 
 g++ -o main main.cpp
 ./main
